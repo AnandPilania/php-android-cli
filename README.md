@@ -4,6 +4,9 @@ PHP Android CLI create/generate Scaffold Android-Studio Gradle project with:
 
   - Modules (application/library)
   - Variants with Dimensions
+  - Scaffold project & application/library level `build.gradle` with package name & `dimensions` & `variants`
+  - Manage `settings.gradle`
+  - Generate `manifest` file & `res` with default `icon`, `color`, `style` & `values`
   - ...
 
 # New Features!
@@ -55,18 +58,20 @@ phpandroid create HelloWorld com.example.helloworld --variants=free:type,paid:ty
 
 here `type` is the `dimension`
 
-## Default Options
-
+## Options
+### Default
 PHP Android CLI is currently using default values for latest Android. These are:
 
 | OPTIONS | Usage | DEFAULT |
 | ------ | ------ | ------ |
-| --targetSdk | set `targetSdk` | 29 |
-| --buildTools | set `buildToolsVersion` | 29.0.1 |
-| --minSdk | set `minSdk` | 16 |
-| --maxSdk | set `maxSdk` | 29 |
-| --androidX | Enable/Disable AndroidX | true |
-| --jetifier | Enable/Disable Jetifier | true |
+| `--compileSdk`/`-cs` | set `targetSdk` | 29 |
+| `--buildTools`/`-bt` | set `buildToolsVersion` | 29.0.1 |
+| `--minSdk`/`-ms` | set `minSdk` | 16 |
+| `--targetSdk`/`-ts` | set `maxSdk` | 29 |
+| `--androidX`/`-x` | Enable/Disable AndroidX | true |
+| `--jetifier`/`-j` | Enable/Disable Jetifier | true |
+
+Use `--force` to re-write existing project.
 
 ### Todos
 
