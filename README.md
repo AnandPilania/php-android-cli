@@ -3,7 +3,7 @@ Create/Scaffold Android-Studio gradle project with Modules & Flavors from CLI wi
 
 Syntax: `php index.php create [options] [--] <project> <pkg>`
 
-Help: `php index.php create help`
+Help: `php index.php help create`
 
 Basic: `php index.php create HelloWorld com.example.helloworld`
 
