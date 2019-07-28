@@ -1,7 +1,9 @@
 # php-android-cli
-Create Android-Studio gradle project  from CLI with PHP (Symfony Console)... [the ugly way...]
+Create/Scaffold Android-Studio gradle project with Modules & Flavors from CLI with PHP in seconds (Symfony Console)... [the ugly way... but working nice :)]
 
 Syntax: `php index.php create [options] [--] <project> <pkg>`
+
+Help: `php index.php create help`
 
 Basic: `php index.php create HelloWorld com.example.helloworld`
 
