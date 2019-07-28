@@ -1,29 +1,83 @@
-# php-android-cli
-Create/Scaffold Android-Studio gradle project with Modules & Flavors from CLI with PHP in seconds (Symfony Console)... [the ugly way... but working nice :)]
+# PHP Android CLI
 
-Syntax: `php index.php create [options] [--] <project> <pkg>`
+PHP Android CLI create/generate Scaffold Android-Studio Gradle project with:
 
-Help: `php index.php help create`
+  - Modules (application/library)
+  - Variants with Dimensions
+  - ...
 
-Basic: `php index.php create HelloWorld com.example.helloworld`
+# New Features!
+
+  - ...
 
 
--OPTIONS
+You can also:
+  - set `targetSdk`
+  - set `buildToolsVersion`
+  - set `minSdk` & `maxSdk`
 
-With Variants: `php index.php create HelloWorld com.example.helloworld --flavors=free:type,paid:type`
+### Tech
 
-With Modules: `php index.php create HelloWorld com.example.helloworld --modules=sdk:library,client`
+PHP Android CLI uses:
 
-Set targetSdk: `--targetSdk=29`
+* [Symfony Console](https://symfony.com/console) - ...
 
-Set compileSdk: `--compileSdk=29`
+And of course `PHP Android CLI` itself is open source with a [public repository][https://github.com/AnandPilania/php-android-cli] on GitHub.
 
-Set minSdk: `--minSdk=16`
+### Installation
 
-Set buildTools: `--buildTools="29.0.1"`
+PHP Android CLI requires [PHP](https://php.net/) v5+ to run.
 
-By default `androidX` is enabled, disable it: '--androidX=false'
+Just download the [`phpandroid`](https://github.com/AnandPilania/php-android-cli/releases/latest) and start scaffolding.
 
-By default `Jetifier` is enabled, disable it: '--jetifier=false'
+```sh
+$ phpandroid create <PROJECT_NAME> <PACKAGE> [OPTIONS]
+```
 
-Forcefully: `--force`
+## USAGE
+### Basic use
+
+Create `HelloWorld` project with `org.example.helloworld` package name:
+```sh
+phpandroid create HelloWorld com.example.helloworld
+```
+
+### Create `Modules` along with `App`
+Create `HelloWorld` project with `sdk` library & `admin` application
+```sh
+phpandroid create HelloWorld com.example.helloworld --modules=sdk:library,admin
+```
+
+### Create `productVariants`: `free` & `paid` variant
+```sh
+phpandroid create HelloWorld com.example.helloworld --variants=free:type,paid:type
+```
+
+here `type` is the `dimension`
+
+## Default Options
+
+PHP Android CLI is currently using default values for latest Android. These are:
+
+| OPTIONS | Usage | DEFAULT |
+| ------ | ------ | ------ |
+| --targetSdk | set `targetSdk` | 29 |
+| --buildTools | set `buildToolsVersion` | 29.0.1 |
+| --minSdk | set `minSdk` | 16 |
+| --maxSdk | set `maxSdk` | 29 |
+| --androidX | Enable/Disable AndroidX | true |
+| --jetifier | Enable/Disable Jetifier | true |
+
+### Todos
+
+ - Create/Scaffold `activity`
+ - Create/Scaffold `variants` source
+ - ...
+
+License
+----
+
+MIT
+
+
+**Free Software, Hell Yeah!**
