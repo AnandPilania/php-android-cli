@@ -13,11 +13,15 @@ With Variants: `php index.php create HelloWorld com.example.helloworld --flavors
 With Modules: `php index.php create HelloWorld com.example.helloworld --modules=sdk:library,client`
 
 Set targetSdk: `--targetSdk=29`
+
 Set compileSdk: `--compileSdk=29`
+
 Set minSdk: `--minSdk=16`
+
 Set buildTools: `--buildTools="29.0.1"`
 
 By default `androidX` is enabled, disable it: '--androidX=false'
+
 By default `Jetifier` is enabled, disable it: '--jetifier=false'
 
 Forcefully: `--force`
