@@ -1,5 +1,5 @@
 # php-android-cli
-Create Android-Studio gradle project  from CLI with PHP (Symfony Console)...
+Create Android-Studio gradle project  from CLI with PHP (Symfony Console)... [the ugly way...]
 
 Syntax: `php index.php create [options] [--] <project> <pkg>`
 
