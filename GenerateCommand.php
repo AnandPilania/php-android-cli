@@ -195,7 +195,7 @@ EOT
 			}
 		}
 		file_put_contents($this->projectName . '\settings.gradle', $settingsContent . "\r\n", 0);
-		file_put_contents($this->projectName . '\local.properties', "ndk.dir=E\:\\SDK\\ndk-bundle\r\nsdk.dir=E\:\\SDK\r\n", 0);
+		// file_put_contents($this->projectName . '\local.properties', "ndk.dir=E\:\\SDK\\ndk-bundle\r\nsdk.dir=E\:\\SDK\r\n", 0);
 
 		$this->output->writeln('<info>' . $this->projectName . ' created successfully!</info>');
 	}
