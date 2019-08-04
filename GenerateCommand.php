@@ -120,13 +120,13 @@ EOT
 				"apply plugin: 'com.android." . $moduleType . "'\r\n\n" .
 					"android {\r\n\t" .
 					"compileSdkVersion " . $this->input->getOption('compileSdk') . "\r\n\t" .
-					"buildToolsVersion " . $this->input->getOption('buildTools') . "\r\n\t" .
+					"buildToolsVersion '" . $this->input->getOption('buildTools') . "'\r\n\t" .
 					"defaultConfig {\r\n\t\t" . ($moduleType === 'library' ? '' : "applicationId '" . ($this->pkgName . ($moduleName === 'app' ? '' : '.' . $moduleName)) . "'\r\n\t\t") .
 					"minSdkVersion " . $this->input->getOption('minSdk') . "\r\n\t\t" .
 					"targetSdkVersion " . $this->input->getOption('targetSdk') . "\r\n\t\t" .
 					"versionCode 1\r\n\t\t" .
 					"versionName '1.0'\r\n\t\t" .
-					"testInstrumentationRunner " . ($isAndroidX ? 'androidx.test.runner.AndroidJUnitRunner' : '') . "\r\n\t" .
+					"testInstrumentationRunner '" . ($isAndroidX ? 'androidx.test.runner.AndroidJUnitRunner' : '') . "'\r\n\t" .
 					"}\r\n\n\t" .
 					"buildTypes {\r\n\t\t" .
 					"debug {\r\n\t\t\tdebuggable true\r\n\t\t}\r\n\t\t" .
