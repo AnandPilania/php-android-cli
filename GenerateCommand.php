@@ -67,8 +67,8 @@ EOT
 
 		$this->_mkdir($this->projectName);
 		$this->copyr(__DIR__ . '/stubs/gradle', $this->projectName . '\gradle');
-		copy(__DIR__ . '/stubs/gradlew',$this->projectName.'\gradlew');
-		copy(__DIR__ . '/stubs/gradlew.bat',$this->projectName.'\gradlew.bat');
+		copy(__DIR__ . '/stubs/gradlew', $this->projectName . '\gradlew');
+		copy(__DIR__ . '/stubs/gradlew.bat', $this->projectName . '\gradlew.bat');
 		$this->_mkdir($this->projectName . '\build');
 
 		file_put_contents($this->projectName . '\build.gradle', "buildscript {\r\n\trepositories {\r\n\t\tgoogle()\r\n\t\tjcenter()\r\n\t}\r\n\tdependencies {\r\n\t\tclasspath 'com.android.tools.build:gradle:3.4.2'\r\n\t}\r\n}\r\n\nallprojects {\r\n\trepositories {\r\n\t\tgoogle()\r\n\t\tjcenter()\r\n\t}\r\n}\r\n\ntask clean(type: Delete) {\r\n\tdelete rootProject.buildDir\r\n}\r\n", 0);
@@ -137,6 +137,7 @@ EOT
 					"dependencies {\r\n\t" .
 					"implementation fileTree(dir: 'libs', include: ['*.jar'])\r\n\t" .
 					"implementation '" . ($isAndroidX ? 'androidx.appcompat:appcompat:1.0.0' : '') . "'\r\n\t" .
+					"implementation '" . ($isAndroidX ? 'androidx.constraintlayout:constraintlayout:1.1.3' : '') . "'\r\n\t" .
 					"testImplementation 'junit:junit:4.12'\r\n\t" .
 					"androidTestImplementation '" . ($isAndroidX ? 'androidx.test:runner:1.2.0' : '') . "'\r\n\t" .
 					"androidTestImplementation '" . ($isAndroidX ? 'androidx.test.espresso:espresso-core:3.2.0' : '') . "'\r\n" .
@@ -152,9 +153,37 @@ EOT
 			$this->_mkdir($this->projectName . '\\' . $moduleName . '\src\androidTest');
 			$this->_mkdir($this->projectName . '\\' . $moduleName . '\src\test');
 			$this->_mkdir($this->projectName . '\\' . $moduleName . '\src\main');
-			file_put_contents(
-				$this->projectName . '\\' . $moduleName . '\src\main\AndroidManifest.xml',
-				'<manifest xmlns:android="http://schemas.android.com/apk/res/android" ' . "\r\n\t" . 'package="' . $this->pkgName . ('app' === $moduleName ? '' : '.' . $moduleName) . '">' . "\r\n\n\t" . ($moduleType === 'library' ? '' : '<application' . "\r\n\t\t" .
+
+			if ($moduleType === 'application') {
+				file_put_contents(
+					$this->projectName . '\\' . $moduleName . '\src\main\AndroidManifest.xml',
+					'<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="' . $this->pkgName . '">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>',
+					0
+				);
+			} else {
+				file_put_contents(
+					$this->projectName . '\\' . $moduleName . '\src\main\AndroidManifest.xml',
+					'<manifest xmlns:android="http://schemas.android.com/apk/res/android" ' . "\r\n\t" . 'package="' . $this->pkgName . ('app' === $moduleName ? '' : '.' . $moduleName) . '">' . "\r\n\n\t" . ($moduleType === 'library' ? '' : '<application' . "\r\n\t\t" .
 						'android:allowBackup="true"' . "\r\n\t\t" .
 						'android:icon="@mipmap/ic_launcher"' . "\r\n\t\t" .
 						'android:label="@string/app_name"' . "\r\n\t\t" .
@@ -162,10 +191,10 @@ EOT
 						'android:supportsRtl="true"' . "\r\n\t\t" .
 						'android:theme="@style/AppTheme">' . "\r\n\t\t\t" .
 						"\r\n\t</application>")
-					. "\r\n</manifest>\r\n",
-				0
-			);
-
+						. "\r\n</manifest>\r\n",
+					0
+				);
+			}
 			$this->_mkdir($this->projectName . '\\' . $moduleName . '\src\main\java');
 			$exPkg = explode('.', $this->pkgName);
 			$_dir = $this->projectName . '\\' . $moduleName . '\src\main\java';
@@ -178,6 +207,28 @@ EOT
 				}
 			}
 
+			if ($moduleType === 'application') {
+				// HelloWorld Activity
+				file_put_contents(
+					$this->projectName . '\\' . $moduleName . '\src\main\java\\' . str_replace($this->pkgName, '.', '\\') . '\\MainActivity.java',
+					"package $this->pkgName;
+			
+import androidx.appcompat.app.AppCompatActivity;
+			
+import android.os.Bundle;
+			
+public class MainActivity extends AppCompatActivity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+	}
+}",
+					0
+				);
+			}
+
 			if ($moduleType === 'library') {
 				$this->_mkdir($this->projectName . '\\' . $moduleName . '\src\main\res');
 				$this->_mkdir($this->projectName . '\\' . $moduleName . '\src\main\res\drawable');
@@ -185,6 +236,31 @@ EOT
 				$this->_mkdir($this->projectName . '\\' . $moduleName . '\src\main\res\values');
 			} else {
 				$this->copyr(__DIR__ . '/stubs/res', $this->projectName . '\\' . $moduleName . '\src\main\res');
+
+				// HelloWorld Layout
+				$this->_mkdir($this->projectName . '\\' . $moduleName . '\src\main\res\layout');
+				file_put_contents(
+					$this->projectName . '\\' . $moduleName . '\src\main\res\layout\activity_main.xml',
+					'<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".MainActivity">
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Hello World!"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>',
+					0
+				);
 			}
 			file_put_contents($this->projectName . '\\' . $moduleName . '\src\main\res\values\strings.xml', "<resources>\r\n\t" . '<string name="app_name">' . ucfirst($moduleName) . "</string>\r\n</resources>\r\n", 0);
 
