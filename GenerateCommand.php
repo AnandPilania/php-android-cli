@@ -208,9 +208,15 @@ EOT
 			}
 
 			if ($moduleType === 'application') {
+
+				// Activity Java File Path Bug Debug
+				// $this->_print_info('Package Name : ' . $this->pkgName);
+				// $this->_print_info('Replaced Package Name : ' . str_replace('.', '\\',$this->pkgName));
+				// $this->output->writeln('<info>MainActivity.java Path : ' . $this->projectName . '\\' . $moduleName . '\src\main\java\\' . str_replace('.', '\\',$this->pkgName) . '\\MainActivity.java' . '</info>');
+
 				// HelloWorld Activity
 				file_put_contents(
-					$this->projectName . '\\' . $moduleName . '\src\main\java\\' . str_replace($this->pkgName, '.', '\\') . '\\MainActivity.java',
+					$this->projectName . '\\' . $moduleName . '\src\main\java\\' . str_replace('.', '\\', $this->pkgName) . '\\MainActivity.java',
 					"package $this->pkgName;
 			
 import androidx.appcompat.app.AppCompatActivity;
@@ -363,5 +369,10 @@ public class MainActivity extends AppCompatActivity {
 		if (!file_exists($dest) || !is_dir($dest)) {
 			mkdir($dest);
 		}
+	}
+
+	private function _print_info($message)
+	{
+		$this->output->writeln('<info>' . $message . '</info>');
 	}
 }
