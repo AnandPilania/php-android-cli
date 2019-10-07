@@ -25,7 +25,7 @@ PHP Android CLI uses:
 
 * [Symfony Console](https://symfony.com/console) - ...
 
-And of course `PHP Android CLI` itself is open source with a [public repository][https://github.com/AnandPilania/php-android-cli] on GitHub.
+And of course `PHP Android CLI` itself is open source with a [public repository](https://github.com/AnandPilania/php-android-cli) on GitHub.
 
 ### Installation
 
