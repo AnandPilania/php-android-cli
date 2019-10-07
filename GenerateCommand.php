@@ -71,7 +71,7 @@ EOT
 		copy(__DIR__ . '/stubs/gradlew.bat', $this->projectName . '\gradlew.bat');
 		$this->_mkdir($this->projectName . '\build');
 
-		file_put_contents($this->projectName . '\build.gradle', "buildscript {\r\n\trepositories {\r\n\t\tgoogle()\r\n\t\tjcenter()\r\n\t}\r\n\tdependencies {\r\n\t\tclasspath 'com.android.tools.build:gradle:3.4.2'\r\n\t}\r\n}\r\n\nallprojects {\r\n\trepositories {\r\n\t\tgoogle()\r\n\t\tjcenter()\r\n\t}\r\n}\r\n\ntask clean(type: Delete) {\r\n\tdelete rootProject.buildDir\r\n}\r\n", 0);
+		file_put_contents($this->projectName . '\build.gradle', "buildscript {\r\n\trepositories {\r\n\t\tgoogle()\r\n\t\tjcenter()\r\n\t}\r\n\tdependencies {\r\n\t\tclasspath 'com.android.tools.build:gradle:3.5.1'\r\n\t}\r\n}\r\n\nallprojects {\r\n\trepositories {\r\n\t\tgoogle()\r\n\t\tjcenter()\r\n\t}\r\n}\r\n\ntask clean(type: Delete) {\r\n\tdelete rootProject.buildDir\r\n}\r\n", 0);
 		file_put_contents($this->projectName . '\.gitignore', "*.iml\r\n.gradle\r\n/local.properties\r\n/.idea/caches\r\n/.idea/libraries\r\n/.idea/modules.xml\r\n/.idea/workspace.xml\r\n/.idea/navEditor.xml\r\n/.idea/assetWizardSettings.xml\r\n.DS_Store\r\n/build\r\n/captures\r\n.externalNativeBuild\r\n/backup\r\n/priv", 0);
 		file_put_contents($this->projectName . '\gradle.properties', "org.gradle.jvmargs=-Xmx1536m\r\nandroid.useAndroidX=" . ($this->input->getOption('androidX') ? "true" : "false") . "\r\nandroid.enableJetifier=" . ($this->input->getOption('jetifier') ? "true" : "false") . "\r\n", 0);
 
