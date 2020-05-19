@@ -40,7 +40,7 @@ $ phpandroid create <PROJECT_NAME> <PACKAGE> [OPTIONS]
 ## USAGE
 ### Basic use
 
-Create `HelloWorld` project with `org.example.helloworld` package name:
+Create `HelloWorld` project with `com.example.helloworld` package name:
 ```sh
 phpandroid create HelloWorld com.example.helloworld
 ```
