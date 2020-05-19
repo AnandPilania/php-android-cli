@@ -10,6 +10,7 @@ class GenerateCommand extends Command
 {
 	private $dimensions = [], $flavors = [], $modules = ['app'];
 	private $input, $output, $projectName, $pkgName;
+	// private $pathSeparator;
 
 	protected function configure()
 	{
@@ -45,6 +46,16 @@ EOT
 	{
 		$this->input = $input;
 		$this->output = $output;
+		/*
+		if ( php_uname("s") === "Linux" ) 
+		{
+			$this->pathSeparator = '/';
+		}
+		else
+		{
+			$this->pathSeparator = '\\';
+		}
+		*/
 
 		$this->projectName = $input->getArgument('project');
 		$this->pkgName = $input->getArgument('pkg');
@@ -66,14 +77,14 @@ EOT
 		}
 
 		$this->_mkdir($this->projectName);
-		$this->copyr(__DIR__ . '/stubs/gradle', $this->projectName . '\gradle');
-		copy(__DIR__ . '/stubs/gradlew', $this->projectName . '\gradlew');
-		copy(__DIR__ . '/stubs/gradlew.bat', $this->projectName . '\gradlew.bat');
-		$this->_mkdir($this->projectName . '\build');
+		$this->copyr(__DIR__ . '/stubs/gradle', $this->projectName . DIRECTORY_SEPARATOR . 'gradle');
+		copy(__DIR__ . '/stubs/gradlew', $this->projectName . DIRECTORY_SEPARATOR . 'gradlew');
+		copy(__DIR__ . '/stubs/gradlew.bat', $this->projectName . DIRECTORY_SEPARATOR . 'gradlew.bat');
+		$this->_mkdir($this->projectName . DIRECTORY_SEPARATOR . 'build');
 
-		file_put_contents($this->projectName . '\build.gradle', "buildscript {\r\n\trepositories {\r\n\t\tgoogle()\r\n\t\tjcenter()\r\n\t}\r\n\tdependencies {\r\n\t\tclasspath 'com.android.tools.build:gradle:3.5.1'\r\n\t}\r\n}\r\n\nallprojects {\r\n\trepositories {\r\n\t\tgoogle()\r\n\t\tjcenter()\r\n\t}\r\n}\r\n\ntask clean(type: Delete) {\r\n\tdelete rootProject.buildDir\r\n}\r\n", 0);
-		file_put_contents($this->projectName . '\.gitignore', "*.iml\r\n.gradle\r\n/local.properties\r\n/.idea/caches\r\n/.idea/libraries\r\n/.idea/modules.xml\r\n/.idea/workspace.xml\r\n/.idea/navEditor.xml\r\n/.idea/assetWizardSettings.xml\r\n.DS_Store\r\n/build\r\n/captures\r\n.externalNativeBuild\r\n/backup\r\n/priv", 0);
-		file_put_contents($this->projectName . '\gradle.properties', "org.gradle.jvmargs=-Xmx1536m\r\nandroid.useAndroidX=" . ($this->input->getOption('androidX') ? "true" : "false") . "\r\nandroid.enableJetifier=" . ($this->input->getOption('jetifier') ? "true" : "false") . "\r\n", 0);
+		file_put_contents($this->projectName . DIRECTORY_SEPARATOR . 'build.gradle', "buildscript {\r\n\trepositories {\r\n\t\tgoogle()\r\n\t\tjcenter()\r\n\t}\r\n\tdependencies {\r\n\t\tclasspath 'com.android.tools.build:gradle:3.5.1'\r\n\t}\r\n}\r\n\nallprojects {\r\n\trepositories {\r\n\t\tgoogle()\r\n\t\tjcenter()\r\n\t}\r\n}\r\n\ntask clean(type: Delete) {\r\n\tdelete rootProject.buildDir\r\n}\r\n", 0);
+		file_put_contents($this->projectName . DIRECTORY_SEPARATOR . '.gitignore', "*.iml\r\n.gradle\r\n/local.properties\r\n/.idea/caches\r\n/.idea/libraries\r\n/.idea/modules.xml\r\n/.idea/workspace.xml\r\n/.idea/navEditor.xml\r\n/.idea/assetWizardSettings.xml\r\n.DS_Store\r\n/build\r\n/captures\r\n.externalNativeBuild\r\n/backup\r\n/priv", 0);
+		file_put_contents($this->projectName . DIRECTORY_SEPARATOR . 'gradle.properties', "org.gradle.jvmargs=-Xmx1536m\r\nandroid.useAndroidX=" . ($this->input->getOption('androidX') ? "true" : "false") . "\r\nandroid.enableJetifier=" . ($this->input->getOption('jetifier') ? "true" : "false") . "\r\n", 0);
 
 		$settingsContent = "include ";
 
@@ -84,9 +95,9 @@ EOT
 				$moduleType = isset($exModule[1]) ? $exModule[1] : 'application';
 			}
 
-			$this->_mkdir($this->projectName . '\\' . $moduleName);
+			$this->_mkdir($this->projectName . DIRECTORY_SEPARATOR . $moduleName);
 
-			file_put_contents($this->projectName . '\\' . $moduleName . '\.gitignore', "/build\n\n", 0);
+			file_put_contents($this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . '.gitignore', "/build\n\n", 0);
 
 			$isAndroidX = $this->input->getOption('androidX');
 
@@ -116,7 +127,7 @@ EOT
 			$fdContent = $dimensionContent . "\r\n\t" . $flavorContent;
 
 			file_put_contents(
-				$this->projectName . '\\' . $moduleName . '\build.gradle',
+				$this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'build.gradle',
 				"apply plugin: 'com.android." . $moduleType . "'\r\n\n" .
 					"android {\r\n\t" .
 					"compileSdkVersion " . $this->input->getOption('compileSdk') . "\r\n\t" .
@@ -144,19 +155,19 @@ EOT
 					"}",
 				0
 			);
-			file_put_contents($this->projectName . '\\' . $moduleName . '\proguard-rules.pro', "\r\n", 0);
+			file_put_contents($this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'proguard-rules.pro', "\r\n", 0);
 
-			$this->_mkdir($this->projectName . '\\' . $moduleName . '\src');
-			$this->_mkdir($this->projectName . '\\' . $moduleName . '\build');
-			$this->_mkdir($this->projectName . '\\' . $moduleName . '\libs');
+			$this->_mkdir($this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'src');
+			$this->_mkdir($this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'build');
+			$this->_mkdir($this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'libs');
 
-			$this->_mkdir($this->projectName . '\\' . $moduleName . '\src\androidTest');
-			$this->_mkdir($this->projectName . '\\' . $moduleName . '\src\test');
-			$this->_mkdir($this->projectName . '\\' . $moduleName . '\src\main');
+			$this->_mkdir($this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'androidTest');
+			$this->_mkdir($this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'test');
+			$this->_mkdir($this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'main');
 
 			if ($moduleType === 'application') {
 				file_put_contents(
-					$this->projectName . '\\' . $moduleName . '\src\main\AndroidManifest.xml',
+					$this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'main' . DIRECTORY_SEPARATOR . 'AndroidManifest.xml',
 					'<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="' . $this->pkgName . '">
@@ -182,7 +193,7 @@ EOT
 				);
 			} else {
 				file_put_contents(
-					$this->projectName . '\\' . $moduleName . '\src\main\AndroidManifest.xml',
+					$this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'main' . DIRECTORY_SEPARATOR . 'AndroidManifest.xml',
 					'<manifest xmlns:android="http://schemas.android.com/apk/res/android" ' . "\r\n\t" . 'package="' . $this->pkgName . ('app' === $moduleName ? '' : '.' . $moduleName) . '">' . "\r\n\n\t" . ($moduleType === 'library' ? '' : '<application' . "\r\n\t\t" .
 						'android:allowBackup="true"' . "\r\n\t\t" .
 						'android:icon="@mipmap/ic_launcher"' . "\r\n\t\t" .
@@ -195,15 +206,15 @@ EOT
 					0
 				);
 			}
-			$this->_mkdir($this->projectName . '\\' . $moduleName . '\src\main\java');
+			$this->_mkdir($this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'main' . DIRECTORY_SEPARATOR . 'java');
 			$exPkg = explode('.', $this->pkgName);
-			$_dir = $this->projectName . '\\' . $moduleName . '\src\main\java';
+			$_dir = $this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'main' . DIRECTORY_SEPARATOR . 'java';
 			$_newDir = '';
 			foreach ($exPkg as $key => $pkgDir) {
-				$_newDir .= '\\' . $pkgDir;
+				$_newDir .= DIRECTORY_SEPARATOR . $pkgDir;
 				$this->_mkdir($_dir . $_newDir);
 				if ($key === (count($exPkg) - 1) && $moduleName !== 'app') {
-					$this->_mkdir($_dir . $_newDir . '\\' . $moduleName);
+					$this->_mkdir($_dir . $_newDir . DIRECTORY_SEPARATOR . $moduleName);
 				}
 			}
 
@@ -211,12 +222,12 @@ EOT
 
 				// Activity Java File Path Bug Debug
 				// $this->_print_info('Package Name : ' . $this->pkgName);
-				// $this->_print_info('Replaced Package Name : ' . str_replace('.', '\\',$this->pkgName));
-				// $this->output->writeln('<info>MainActivity.java Path : ' . $this->projectName . '\\' . $moduleName . '\src\main\java\\' . str_replace('.', '\\',$this->pkgName) . '\\MainActivity.java' . '</info>');
+				// $this->_print_info('Replaced Package Name : ' . str_replace('.', DIRECTORY_SEPARATOR,$this->pkgName));
+				// $this->output->writeln('<info>MainActivity.java Path : ' . $this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'main' . DIRECTORY_SEPARATOR . 'java'. DIRECTORY_SEPARATOR . str_replace('.', DIRECTORY_SEPARATOR,$this->pkgName) . DIRECTORY_SEPARATOR . 'MainActivity.java' . '</info>');
 
 				// HelloWorld Activity
 				file_put_contents(
-					$this->projectName . '\\' . $moduleName . '\src\main\java\\' . str_replace('.', '\\', $this->pkgName) . '\\MainActivity.java',
+					$this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'main' . DIRECTORY_SEPARATOR . 'java'. DIRECTORY_SEPARATOR . str_replace('.', DIRECTORY_SEPARATOR, $this->pkgName) . DIRECTORY_SEPARATOR . 'MainActivity.java',
 					"package $this->pkgName;
 			
 import androidx.appcompat.app.AppCompatActivity;
@@ -236,17 +247,17 @@ public class MainActivity extends AppCompatActivity {
 			}
 
 			if ($moduleType === 'library') {
-				$this->_mkdir($this->projectName . '\\' . $moduleName . '\src\main\res');
-				$this->_mkdir($this->projectName . '\\' . $moduleName . '\src\main\res\drawable');
-				$this->_mkdir($this->projectName . '\\' . $moduleName . '\src\main\res\layout');
-				$this->_mkdir($this->projectName . '\\' . $moduleName . '\src\main\res\values');
+				$this->_mkdir($this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'main' . DIRECTORY_SEPARATOR . 'res');
+				$this->_mkdir($this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'main' . DIRECTORY_SEPARATOR . 'res' . DIRECTORY_SEPARATOR . 'drawable');
+				$this->_mkdir($this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'main' . DIRECTORY_SEPARATOR . 'res' . DIRECTORY_SEPARATOR . 'layout');
+				$this->_mkdir($this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'main' . DIRECTORY_SEPARATOR . 'res' . DIRECTORY_SEPARATOR . 'values');
 			} else {
-				$this->copyr(__DIR__ . '/stubs/res', $this->projectName . '\\' . $moduleName . '\src\main\res');
+				$this->copyr(__DIR__ . '/stubs/res', $this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'main' . DIRECTORY_SEPARATOR . 'res');
 
 				// HelloWorld Layout
-				$this->_mkdir($this->projectName . '\\' . $moduleName . '\src\main\res\layout');
+				$this->_mkdir($this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'main' . DIRECTORY_SEPARATOR . 'res' . DIRECTORY_SEPARATOR . 'layout');
 				file_put_contents(
-					$this->projectName . '\\' . $moduleName . '\src\main\res\layout\activity_main.xml',
+					$this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'main' . DIRECTORY_SEPARATOR . 'res' . DIRECTORY_SEPARATOR . 'layout' . DIRECTORY_SEPARATOR . 'activity_main.xml',
 					'<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -268,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
 					0
 				);
 			}
-			file_put_contents($this->projectName . '\\' . $moduleName . '\src\main\res\values\strings.xml', "<resources>\r\n\t" . '<string name="app_name">' . ucfirst($moduleName) . "</string>\r\n</resources>\r\n", 0);
+			file_put_contents($this->projectName . DIRECTORY_SEPARATOR . $moduleName . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'main' . DIRECTORY_SEPARATOR . 'res' . DIRECTORY_SEPARATOR . 'values' . DIRECTORY_SEPARATOR . 'strings.xml', "<resources>\r\n\t" . '<string name="app_name">' . ucfirst($moduleName) . "</string>\r\n</resources>\r\n", 0);
 
 			$settingsContent .= "':" . $moduleName . "'";
 
@@ -276,8 +287,8 @@ public class MainActivity extends AppCompatActivity {
 				$settingsContent .= ",";
 			}
 		}
-		file_put_contents($this->projectName . '\settings.gradle', $settingsContent . "\r\n", 0);
-		// file_put_contents($this->projectName . '\local.properties', "ndk.dir=E\:\\SDK\\ndk-bundle\r\nsdk.dir=E\:\\SDK\r\n", 0);
+		file_put_contents($this->projectName . DIRECTORY_SEPARATOR . 'settings.gradle', $settingsContent . "\r\n", 0);
+		// file_put_contents($this->projectName . DIRECTORY_SEPARATOR . 'local.properties', "ndk.dir=E\:\\SDK\\ndk-bundle\r\nsdk.dir=E\:\\SDK\r\n", 0);
 
 		$this->output->writeln('<info>' . $this->projectName . ' created successfully!</info>');
 	}
@@ -367,6 +378,7 @@ public class MainActivity extends AppCompatActivity {
 	private function _mkdir($dest)
 	{
 		if (!file_exists($dest) || !is_dir($dest)) {
+			//$this->_print_info("$dest\n");
 			mkdir($dest);
 		}
 	}
