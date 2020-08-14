@@ -1,7 +1,7 @@
 <?php
 
 define('BASEDIR', dirname(dirname(__FILE__)));
-define('BUILDDIR', BASEDIR . DIRECTORY_SEPARATOR . 'tasks');
+define('BUILDDIR', BASEDIR . '/tasks');
 
 $exclude = [
 	'build',
@@ -30,5 +30,5 @@ $phar = new \Phar('phpandroid.phar', 0, 'phpandroid.phar');
 $phar->setSignatureAlgorithm(\Phar::SHA1);
 $phar->startBuffering();
 $phar->buildFromIterator($iterator, BASEDIR);
-$phar->setStub(file_get_contents(BUILDDIR . DIRECTORY_SEPARATOR . 'stub.php'));
+$phar->setStub(file_get_contents(BUILDDIR . '/stub.php'));
 $phar->stopBuffering();
