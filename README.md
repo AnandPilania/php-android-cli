@@ -1,5 +1,7 @@
 # PHP Android CLI
 
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FAnandPilania%2Fphp-android-cli&count_bg=%23FF3863&title_bg=%232C3E50&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
+
 PHP Android CLI create/generate Scaffold Android-Studio Gradle project with:
 
   - Modules (application/library)
