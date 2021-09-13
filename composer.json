@@ -1,5 +1,10 @@
 {
     "require": {
-        "symfony/console": "^4.3"
+        "symfony/console": "^5.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "KSPEdu\\PHPAndroidCli\\": "src/"
+        }
     }
 }
